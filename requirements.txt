@@ -10,3 +10,4 @@ six==1.10.0
 SQLAlchemy==1.0.12
 uWSGI==2.0.12
 voluptuous==0.8.11
+gunicorn==19.6.0
