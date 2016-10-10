@@ -87,5 +87,5 @@ Start with the `index.py` and follow the code. You will be able to build a robus
 
 ## Contributions
 If you are willing to contribute to the project, these are some of the immediate requirements you could consider:
-    * Support for XML output
-    * Ways to easily customize Voluptuous error messages
+* Support for XML output
+* Ways to easily customize Voluptuous error messages
