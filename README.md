@@ -37,7 +37,7 @@ When you want to build a RESTful API using Python, here you have the easiest way
     
 5. Install required packages
     ```bash
-    $ pip install -r PuppetFrame/requirements.txt
+    $ sudo apt-get install libmysqlclient-dev -y && pip install -r PuppetFrame/requirements.txt
     ```
     
 6. Invoke the web server
