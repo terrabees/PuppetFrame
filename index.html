@@ -1,0 +1,155 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>PuppetFrame by terrabees</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/github-light.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1 class="header">PuppetFrame</h1>
+        <p class="header">API bootstrap built using Falcon Framework</p>
+
+        <ul>
+          <li class="download"><a class="buttons" href="https://github.com/terrabees/PuppetFrame/zipball/master">Download ZIP</a></li>
+          <li class="download"><a class="buttons" href="https://github.com/terrabees/PuppetFrame/tarball/master">Download TAR</a></li>
+          <li><a class="buttons github" href="https://github.com/terrabees/PuppetFrame">View On GitHub</a></li>
+        </ul>
+
+        <p class="header">This project is maintained by <a class="header name" href="https://github.com/terrabees">terrabees</a></p>
+
+
+      </header>
+      <section>
+        <h1>
+<a id="puppetframe" class="anchor" href="#puppetframe" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>PuppetFrame</h1>
+
+<p>API bootstrap built using Falcon Framework.</p>
+
+<p>When you want to build a RESTful API using Python, here you have the easiest way to kickstart. PuppetFrame contains all the files and classes that you can use to quickly deploy a working API in less than fifteen minutes.</p>
+
+<h2>
+<a id="what-is-it" class="anchor" href="#what-is-it" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>What is it?</h2>
+
+<ol>
+<li>Runs on Python 3.x</li>
+<li>Built using <a href="https://falconframework.org/">Falcon Framework</a>
+</li>
+<li>Provides token-based authentication
+
+<ul>
+<li><em>Uses Redis as session store</em></li>
+</ul>
+</li>
+<li>Incorporates production grade data validation (<a href="https://github.com/alecthomas/voluptuous">Voluptuous</a>)</li>
+<li>Full HTTP verbs support (OPTIONS, GET, POST, PUT, DELETE)</li>
+<li>Uses <a href="http://www.sqlalchemy.org/">SQLAlchemy</a> for ORM</li>
+<li>Provides ready-to-use JSON output manager</li>
+</ol>
+
+<h2>
+<a id="installation" class="anchor" href="#installation" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Installation</h2>
+
+<ol>
+<li><p>Fork this repository to your own account. DO NOT CLONE THIS REPO DIRECTLY.</p></li>
+<li>
+<p>Clone your fork.</p>
+
+<div class="highlight highlight-source-shell"><pre>$ git clone https://github.com/<span class="pl-k">&lt;</span>USERNAME<span class="pl-k">&gt;</span>/PuppetFrame</pre></div>
+</li>
+<li>
+<p>Create a Python virtual environment (requires Python 3.x)</p>
+
+<div class="highlight highlight-source-shell"><pre>$ python -m venv PuppetFrameEnv</pre></div>
+
+<p>Read more about creating virtual environments <a href="https://docs.python.org/3/library/venv.html">here</a>.</p>
+</li>
+<li>
+<p>Activate virtual environment</p>
+
+<div class="highlight highlight-source-shell"><pre>$ <span class="pl-c1">source</span> PuppetFrameEnv/bin/activate</pre></div>
+</li>
+<li>
+<p>Install required packages</p>
+
+<div class="highlight highlight-source-shell"><pre>$ pip install -r PuppetFrame/requirements.txt</pre></div>
+</li>
+<li>
+<p>Invoke the web server</p>
+
+<div class="highlight highlight-source-shell"><pre>$ <span class="pl-c1">cd</span> PuppetFrame
+$ gunicorn index:app</pre></div>
+
+<p>Now the API must be available at <a href="http://127.0.0.1:8000">http://127.0.0.1:8000</a></p>
+</li>
+</ol>
+
+<h2>
+<a id="configuring-databases" class="anchor" href="#configuring-databases" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Configuring databases</h2>
+
+<p>Now you can't do pretty much anything until the databases are configured. MySQL is expected to be the master database and Redis for the session storage. Once you have the credentials for both MySQL and Redis, you must create a credential file in your home folder. Credential files are never a part of your version controlled codebase because of their sensitive nature.</p>
+
+<ul>
+<li>
+<p>Create a file <code>~/config/puppet/db_config.ini</code>. Create the folders if they don't exist.</p>
+
+<div class="highlight highlight-source-shell"><pre>$ mkdir -p <span class="pl-k">~</span>/config/puppet
+$ vi <span class="pl-k">~</span>/config/puppet/db_config.ini</pre></div>
+</li>
+<li>
+<p>Populate it with following text and replace with appropriate values:</p>
+
+<div class="highlight highlight-source-ini"><pre><span class="pl-en">[PUPPET]</span>
+<span class="pl-k">Host</span> = mysqlhost.example.com
+<span class="pl-k">Port</span> = 3306
+<span class="pl-k">Database</span> = puppet
+<span class="pl-k">Username</span> = myuser
+<span class="pl-k">Password</span> = 12345
+
+<span class="pl-en">[SESSION-CACHE]</span>
+<span class="pl-k">Host</span> = redishost.example.com
+<span class="pl-k">Port</span> = 6379
+<span class="pl-k">Database</span> = 0</pre></div>
+</li>
+<li>
+<p>Now you have the config file, you should say the script where to find it. Open the file <code>config/__init__.py</code> and replace the following value with the right one:</p>
+
+<div class="highlight highlight-source-python"><pre><span class="pl-c1">DB_CONFIG_PATH</span> <span class="pl-k">=</span> os.path.expanduser(os.path.join(<span class="pl-s"><span class="pl-pds">'</span>~<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>config<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>puppet<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>db.ini<span class="pl-pds">'</span></span>))</pre></div>
+</li>
+<li><p>Congrats! Now your API is ready to interact with the MySQL and Redis databases.</p></li>
+</ul>
+
+<h2>
+<a id="defining-mysql-schema" class="anchor" href="#defining-mysql-schema" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Defining MySQL schema</h2>
+
+<p>PuppetFrame uses SQLAlchemy as an ORM and thus requires no manual creation of schemas directly in the database. Instead, define your schema in <code>models/puppet_model.py</code> and SQLAlchemy will create the required tables for you by running the script file <code>init/create_schema.py</code>.</p>
+
+<h2>
+<a id="whats-next" class="anchor" href="#whats-next" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>What's next?</h2>
+
+<p>Start with the <code>index.py</code> and follow the code. You will be able to build a robust API from here on.</p>
+
+<h2>
+<a id="contributions" class="anchor" href="#contributions" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Contributions</h2>
+
+<p>If you are willing to contribute to the project, these are some of the immediate requirements you could consider:
+    * Support for XML output
+    * Ways to easily customize Voluptuous error messages</p>
+      </section>
+      <footer>
+        <p><small>Hosted on <a href="https://pages.github.com">GitHub Pages</a> using the Dinky theme</small></p>
+      </footer>
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+		
+  </body>
+</html>
